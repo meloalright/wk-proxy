@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q6t-W8-roq">
+                                <rect key="frame" x="299" y="40" width="56" height="30"/>
+                                <state key="normal" title="Browser"/>
+                                <connections>
+                                    <action selector="browserHandler:" destination="BYZ-38-t0r" eventType="touchDown" id="N3B-4N-D1r"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4lC-M2-dNB">
+                                <rect key="frame" x="20" y="40" width="43" height="30"/>
+                                <state key="normal" title="Regist"/>
+                                <connections>
+                                    <action selector="regist:" destination="BYZ-38-t0r" eventType="touchDown" id="G1J-j7-zVP"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="slW-96-Vsh">
+                                <rect key="frame" x="100" y="40" width="63" height="30"/>
+                                <state key="normal" title="UnRegist"/>
+                                <connections>
+                                    <action selector="unregist:" destination="BYZ-38-t0r" eventType="touchDown" id="JHs-sM-tde"/>
+                                </connections>
+                            </button>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ikc-VB-Icn">
+                                <rect key="frame" x="0.0" y="100" width="375" height="567"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3s6-Rk-zOr">
+                                <rect key="frame" x="180" y="40" width="30" height="30"/>
+                                <state key="normal" title="↓"/>
+                                <connections>
+                                    <action selector="downloadSource:" destination="BYZ-38-t0r" eventType="touchDown" id="kLS-Qz-YX5"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="ikc-VB-Icn" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="1X2-lu-l4b"/>
+                            <constraint firstItem="3s6-Rk-zOr" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="40" id="8sk-lL-Gf7"/>
+                            <constraint firstItem="4lC-M2-dNB" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="40" id="CPm-lJ-X0P"/>
+                            <constraint firstItem="3s6-Rk-zOr" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="180" id="Dw6-1Q-MyQ"/>
+                            <constraint firstItem="Q6t-W8-roq" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="40" id="FQI-fP-yXU"/>
+                            <constraint firstItem="slW-96-Vsh" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="40" id="GNz-MF-fcL"/>
+                            <constraint firstItem="ikc-VB-Icn" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="100" id="GjK-Ut-OeE"/>
+                            <constraint firstItem="slW-96-Vsh" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="100" id="K3z-hU-WdN"/>
+                            <constraint firstAttribute="bottom" secondItem="ikc-VB-Icn" secondAttribute="bottom" id="TOK-Hf-qsE"/>
+                            <constraint firstAttribute="trailing" secondItem="Q6t-W8-roq" secondAttribute="trailing" constant="20" id="U1r-me-fcV"/>
+                            <constraint firstItem="ikc-VB-Icn" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="100" id="XWM-hL-yBn"/>
+                            <constraint firstItem="4lC-M2-dNB" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="nEg-mV-P6k"/>
+                            <constraint firstAttribute="trailing" secondItem="ikc-VB-Icn" secondAttribute="trailing" id="vCc-8q-diI"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <connections>
+                        <outlet property="browserButton" destination="Q6t-W8-roq" id="tFQ-gO-fx6"/>
+                        <outlet property="registButton" destination="4lC-M2-dNB" id="3lF-Te-Jvh"/>
+                        <outlet property="unregistButton" destination="slW-96-Vsh" id="h50-CI-9Lb"/>
+                        <outlet property="wk" destination="ikc-VB-Icn" id="ipc-yq-PCn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+</document>
