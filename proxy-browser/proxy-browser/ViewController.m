@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 #import "ProtocolCustom.h"
+#import "SSZipArchive.h"
+#import "zlib.h"
 #import <WebKit/WebKit.h>
 
 
@@ -50,7 +52,7 @@
 - (IBAction)downloadSource:(id)sender {
     NSDictionary *_headers;
     NSURLSession *_session = [self sessionWithHeaders:_headers];
-    NSURL *url = [NSURL URLWithString: @"https://cn.bing.com/s/cn/logo_hp_mobile.png"];
+    NSURL *url = [NSURL URLWithString: @"http://10.2.138.225:3238/dist.zip"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     
     //初始化cachepath
@@ -58,20 +60,27 @@
     NSFileManager *fm = [NSFileManager defaultManager];
     
     //删除之前已有的文件
-    [fm removeItemAtPath:[cachePath stringByAppendingPathComponent:@"qihoo.png"] error:nil];
+    [fm removeItemAtPath:[cachePath stringByAppendingPathComponent:@"dist.zip"] error:nil];
     
     NSURLSessionDownloadTask *downloadTask=[_session downloadTaskWithRequest:request completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
         if (!error) {
             
-            NSString *dataHash = @"error";
             NSError *saveError;
             
-            NSURL *saveUrl = [NSURL fileURLWithPath: [cachePath stringByAppendingPathComponent:@"qihoo.png"]];
+            NSURL *saveUrl = [NSURL fileURLWithPath: [cachePath stringByAppendingPathComponent:@"dist.zip"]];
             
             //location是下载后的临时保存路径,需要将它移动到需要保存的位置
             [[NSFileManager defaultManager] copyItemAtURL:location toURL:saveUrl error:&saveError];
             if (!saveError) {
                 NSLog(@"task ok");
+                if([SSZipArchive unzipFileAtPath:
+                    [cachePath stringByAppendingPathComponent:@"dist.zip"]
+                                   toDestination:cachePath]) {
+                    NSLog(@"unzip ok");//解压成功
+                }
+                else {
+                    NSLog(@"unzip err");//解压失败
+                }
             }
             else {
                 NSLog(@"task err");
@@ -102,7 +111,7 @@
     NSLog(@"open browser");
     [super viewDidLoad];
 
-    NSURL *nsurl=[NSURL URLWithString:@"https://m.sohu.com"];
+    NSURL *nsurl=[NSURL URLWithString:@"http://10.2.138.225:3233/index.html"];
 
     NSURLRequest *nsrequest=[NSURLRequest requestWithURL:nsurl];
 
