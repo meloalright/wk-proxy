@@ -8,7 +8,7 @@
 #import <objc/runtime.h>
 #import <Foundation/Foundation.h>
 
-static NSString*const sourUrl  = @"https://29e5534ea20a8.cdn.sohucs.com/mobile/sohu-logo-d.png";
+static NSString*const sourUrl  = @"https://29e5534ea20a8.cdn.sohucs.com";
 static NSString* localUrl = @"https://m.baidu.com/static/index/plus/plus_logo.png";
 //static NSString* localUrl = @"file://private/var/mobile/Containers/Data/Application/xxxxx/tmp/qihoo.png";
 static NSString*const FilteredCssKey = @"filteredCssKey";
@@ -33,7 +33,7 @@ static NSString*const FilteredCssKey = @"filteredCssKey";
     NSLog(@"\n");
     NSMutableURLRequest *mutableReqeust = [request mutableCopy];
     //截取重定向
-    if ([request.URL.absoluteString isEqualToString:sourUrl])
+    if ([request.URL.absoluteString hasPrefix:sourUrl])
     {
         NSURL* url1 = [NSURL URLWithString:localUrl];
         NSLog(@"Proxy to = %@",localUrl);
