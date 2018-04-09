@@ -8,7 +8,7 @@
 #import <objc/runtime.h>
 #import <Foundation/Foundation.h>
 
-static NSString*const sourUrl  = @"http://10.2.138.225:3233/static/css/app.30790115300ab27614ce176899523b62.css";
+static NSString*const sourUrl  = @"http://10.2.138.225:3233/static/css";
 static NSString* localUrl = @"";
 //static NSString* localUrl = @"file://private/var/mobile/Containers/Data/Application/xxxxx/tmp/qihoo.png";
 static NSString*const FilteredCssKey = @"filteredCssKey";
@@ -87,15 +87,16 @@ static NSString*const FilteredCssKey = @"filteredCssKey";
 }
 
 - (NSString *)setProxyLocalPath {
-        NSString *cachewww = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-        NSFileManager *fm = [NSFileManager defaultManager];
-        NSString *tmpwww = [NSTemporaryDirectory() stringByAppendingPathComponent:@"dist"];
-        [fm removeItemAtPath:tmpwww error:nil];
+    NSString *cachewww = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSString *tmpwww = [NSTemporaryDirectory() stringByAppendingPathComponent:@"dist"];
+    [fm removeItemAtPath:tmpwww error:nil];
         
-        NSError *saveError;
-        //读取前先从caches拷贝到tmp临时文件夹
-        [[NSFileManager defaultManager] copyItemAtURL:[NSURL fileURLWithPath:[cachewww stringByAppendingPathComponent:@"dist"]] toURL:[NSURL fileURLWithPath:tmpwww] error:&saveError];
-    return [@"file:/" stringByAppendingString:[tmpwww stringByAppendingString: @"/static/css/app.30790115300ab27614ce176899523b62.css"]];
+    NSError *saveError;
+    //读取前先从caches拷贝到tmp临时文件夹
+    [[NSFileManager defaultManager] copyItemAtURL:[NSURL fileURLWithPath:[cachewww stringByAppendingPathComponent:@"dist"]] toURL:[NSURL fileURLWithPath:tmpwww] error:&saveError];
+    NSLog(@"copy ok");
+    return [@"file:/" stringByAppendingString:[tmpwww stringByAppendingString: @"/static/css/app.6feac7debba4abd4a8681aaef213cf2d.css"]];
 }
 @end
 
