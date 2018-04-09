@@ -9,7 +9,7 @@ cd proxy-browser && pod install
 
 
 ```python
-cd zip-in-vue && python SimpleHTTPServer 3238
+cd zip-in-vue && python -m SimpleHTTPServer 3238
 ```
    
    
@@ -17,6 +17,6 @@ cd zip-in-vue && python SimpleHTTPServer 3238
 
 
 ```python
-cd zip-in-vue/dist && python SimpleHTTPServer 3233
+cd zip-in-vue/dist && python -m SimpleHTTPServer 3233
 ```
-~                
+                
