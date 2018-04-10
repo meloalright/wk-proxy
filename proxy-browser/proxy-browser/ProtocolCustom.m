@@ -35,8 +35,9 @@ static NSString*const FilteredCssKey = @"filteredCssKey";
     //截取重定向
     if ([request.URL.absoluteString hasPrefix:sourUrl])
     {
+        localUrl = [FilteredProtocol setProxyLocalPath];
         NSURL* url1 = [NSURL URLWithString:localUrl];
-        NSLog(@"Proxy to = %@",localUrl);
+        NSLog(@"Proxy to = %@", localUrl);
         mutableReqeust = [NSMutableURLRequest requestWithURL:url1];
     }
     return mutableReqeust;
@@ -49,7 +50,6 @@ static NSString*const FilteredCssKey = @"filteredCssKey";
 
 - (void)startLoading {
     NSMutableURLRequest *mutableReqeust = [[self request] mutableCopy];
-    localUrl = [self setProxyLocalPath];
     //标示改request已经处理过了，防止无限循环
     [NSURLProtocol setProperty:@YES forKey:FilteredCssKey inRequest:mutableReqeust];
     self.connection = [NSURLConnection connectionWithRequest:mutableReqeust delegate:self];
@@ -86,7 +86,7 @@ static NSString*const FilteredCssKey = @"filteredCssKey";
     [self.client URLProtocolDidFinishLoading:self];
 }
 
-- (NSString *)setProxyLocalPath {
++ (NSString *)setProxyLocalPath {
     NSString *cachewww = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
     NSFileManager *fm = [NSFileManager defaultManager];
     NSString *tmpwww = [NSTemporaryDirectory() stringByAppendingPathComponent:@"dist"];
