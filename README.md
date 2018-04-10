@@ -1,14 +1,10 @@
 # wk-proxy    
    
    
-```shell
-cd proxy-browser && pod install 
-```
-   
-   
 
 
 ```shell
+# start zip download serve
 npm run 3238
 ```
    
@@ -17,6 +13,13 @@ npm run 3238
 
 
 ```shell
+# start remote web page
 npm run 3233
 ```
                 
+   
+   
+```shell
+# iOS project
+cd proxy-browser && pod install 
+```
