@@ -8,10 +8,10 @@
 #import <objc/runtime.h>
 #import <Foundation/Foundation.h>
 
-static NSString*const sourUrl  = @"http://10.2.138.225:3233/static/css";
-static NSString* localUrl = @"";
-//static NSString* localUrl = @"file://private/var/mobile/Containers/Data/Application/xxxxx/tmp/qihoo.png";
-static NSString*const FilteredCssKey = @"filteredCssKey";
+static NSString*const matchingPrefix = @"http://10.2.138.225:3233/static";
+static NSString*const regPrefix = @"http://10.2.138.225:3233";
+static NSString* tmpURL = @"";
+static NSString*const FilteredKey = @"FilteredKey";
 
 
 @interface FilteredProtocol : NSURLProtocol
@@ -22,23 +22,20 @@ static NSString*const FilteredCssKey = @"filteredCssKey";
 @implementation FilteredProtocol
 + (BOOL)canInitWithRequest:(NSURLRequest *)request
 {
-    NSLog(@"request.URL.absoluteString = %@",request.URL.absoluteString);
-    NSLog(@"\n");
-    return [NSURLProtocol propertyForKey:FilteredCssKey inRequest:request]== nil;
+    return [NSURLProtocol propertyForKey:FilteredKey inRequest:request]== nil;
 }
 
 + (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request
 {
     NSLog(@"Got it request.URL.absoluteString = %@",request.URL.absoluteString);
-    NSLog(@"\n");
+
     NSMutableURLRequest *mutableReqeust = [request mutableCopy];
     //截取重定向
-    if ([request.URL.absoluteString hasPrefix:sourUrl])
+    if ([request.URL.absoluteString hasPrefix:matchingPrefix])
     {
-        localUrl = [FilteredProtocol setProxyLocalPath];
-        NSURL* url1 = [NSURL URLWithString:localUrl];
-        NSLog(@"Proxy to = %@", localUrl);
-        mutableReqeust = [NSMutableURLRequest requestWithURL:url1];
+        NSURL* proxyURL = [NSURL URLWithString:[FilteredProtocol generateProxyPath: request.URL.absoluteString]];
+        NSLog(@"Proxy to = %@", proxyURL);
+        mutableReqeust = [NSMutableURLRequest requestWithURL: proxyURL];
     }
     return mutableReqeust;
 }
@@ -51,7 +48,7 @@ static NSString*const FilteredCssKey = @"filteredCssKey";
 - (void)startLoading {
     NSMutableURLRequest *mutableReqeust = [[self request] mutableCopy];
     //标示改request已经处理过了，防止无限循环
-    [NSURLProtocol setProperty:@YES forKey:FilteredCssKey inRequest:mutableReqeust];
+    [NSURLProtocol setProperty:@YES forKey:FilteredKey inRequest:mutableReqeust];
     self.connection = [NSURLConnection connectionWithRequest:mutableReqeust delegate:self];
     
 }
@@ -86,17 +83,19 @@ static NSString*const FilteredCssKey = @"filteredCssKey";
     [self.client URLProtocolDidFinishLoading:self];
 }
 
-+ (NSString *)setProxyLocalPath {
-    NSString *cachewww = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
++ (NSString *)generateProxyPath:(NSString *) absoluteURL {
+    NSString *cacheFilePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
     NSFileManager *fm = [NSFileManager defaultManager];
-    NSString *tmpwww = [NSTemporaryDirectory() stringByAppendingPathComponent:@"dist"];
-    [fm removeItemAtPath:tmpwww error:nil];
-        
+    NSString *tmpFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"dist"];
+    NSString *fileURL = [@"file:/" stringByAppendingString: tmpFilePath];
+
+    [fm removeItemAtPath:tmpFilePath error:nil];
     NSError *saveError;
     //读取前先从caches拷贝到tmp临时文件夹
-    [[NSFileManager defaultManager] copyItemAtURL:[NSURL fileURLWithPath:[cachewww stringByAppendingPathComponent:@"dist"]] toURL:[NSURL fileURLWithPath:tmpwww] error:&saveError];
+    [[NSFileManager defaultManager] copyItemAtURL:[NSURL fileURLWithPath:[cacheFilePath stringByAppendingPathComponent:@"dist"]] toURL:[NSURL fileURLWithPath:tmpFilePath] error:&saveError];
     NSLog(@"copy ok");
-    return [@"file:/" stringByAppendingString:[tmpwww stringByAppendingString: @"/static/css/app.6feac7debba4abd4a8681aaef213cf2d.css"]];
+    return [absoluteURL stringByReplacingOccurrencesOfString:regPrefix
+                                                 withString:fileURL];
 }
 @end
 
