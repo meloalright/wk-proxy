@@ -13,7 +13,7 @@ npm run 3238
 
 
 ```shell
-# start remote web serve
+# start web serve
 npm run 3233
 ```
                 
