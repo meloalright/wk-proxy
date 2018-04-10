@@ -9,7 +9,7 @@ cd proxy-browser && pod install
 
 
 ```shell
-make 3238
+npm run 3238
 ```
    
    
@@ -17,6 +17,6 @@ make 3238
 
 
 ```shell
-make 3233
+npm run 3233
 ```
                 

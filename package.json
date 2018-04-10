@@ -1,0 +1,23 @@
+{
+  "name": "proxy-browser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "3233": "http-server ./zip-in-vue/dist/ -p 3233",
+    "3238": "http-server ./zip-in-vue -p 3238"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meloalright/wk-proxy.git"
+  },
+  "author": "meloalright",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/meloalright/wk-proxy/issues"
+  },
+  "homepage": "https://github.com/meloalright/wk-proxy#readme",
+  "dependencies": {
+    "http-server": "0.11.1"
+  }
+}
