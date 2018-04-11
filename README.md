@@ -32,4 +32,6 @@ cd proxy-browser && pod install
    
 ## Step 4    
    
-`# run app`
+```shell
+# open xcworkspace + run app
+```
