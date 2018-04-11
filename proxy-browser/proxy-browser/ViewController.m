@@ -100,11 +100,11 @@ static NSUInteger const TIMEOUT = 300;
     NSURL *url = [NSURL URLWithString: @"http://10.2.138.225:3238/dist.zip"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     
-    //初始化cachepath
+    // 初始化cachepath
     NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
     NSFileManager *fm = [NSFileManager defaultManager];
     
-    //删除之前已有的文件
+    // 删除之前已有的文件
     [fm removeItemAtPath:[cachePath stringByAppendingPathComponent:@"dist.zip"] error:nil];
     
     NSURLSessionDownloadTask *downloadTask=[_session downloadTaskWithRequest:request completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
@@ -114,17 +114,17 @@ static NSUInteger const TIMEOUT = 300;
             
             NSURL *saveUrl = [NSURL fileURLWithPath: [cachePath stringByAppendingPathComponent:@"dist.zip"]];
             
-            //location是下载后的临时保存路径,需要将它移动到需要保存的位置
+            // location是下载后的临时保存路径,需要将它移动到需要保存的位置
             [[NSFileManager defaultManager] copyItemAtURL:location toURL:saveUrl error:&saveError];
             if (!saveError) {
                 NSLog(@"task ok");
                 if([SSZipArchive unzipFileAtPath:
                     [cachePath stringByAppendingPathComponent:@"dist.zip"]
                                    toDestination:cachePath]) {
-                    NSLog(@"unzip ok");//解压成功
+                    NSLog(@"unzip ok");// 解压成功
                 }
                 else {
-                    NSLog(@"unzip err");//解压失败
+                    NSLog(@"unzip err");// 解压失败
                 }
             }
             else {
