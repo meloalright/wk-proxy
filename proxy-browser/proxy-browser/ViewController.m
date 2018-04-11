@@ -99,6 +99,7 @@
 
 - (IBAction)regist:(id)sender {
     [self clearBrowserCache];
+    [self migrateDistToTempory];
     [NSURLProtocol registerClass:[FilteredProtocol class]];
 }
 
@@ -130,6 +131,21 @@ static NSUInteger const TIMEOUT = 300;
     }
     
     return [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
+}
+
+
+- (void)migrateDistToTempory {
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSString *cacheFilePath = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"dist"];
+    NSString *tmpFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"dist"];
+    
+    // 先删除tempory已有的dist资源
+    [fm removeItemAtPath:tmpFilePath error:nil];
+    NSError *saveError;
+    
+    // 从caches拷贝dist到tempory临时文件夹
+    [[NSFileManager defaultManager] copyItemAtURL:[NSURL fileURLWithPath:cacheFilePath] toURL:[NSURL fileURLWithPath:tmpFilePath] error:&saveError];
+    NSLog(@"Migrate dist to tempory ok");
 }
 
 @end

@@ -7,6 +7,7 @@
 //
 #import <objc/runtime.h>
 #import <Foundation/Foundation.h>
+#import <MobileCoreServices/MobileCoreServices.h>
 
 static NSString*const matchingPrefix = @"http://10.2.138.225:3233/static";
 static NSString*const regPrefix = @"http://10.2.138.225:3233";
@@ -47,10 +48,44 @@ static NSString*const FilteredKey = @"FilteredKey";
 
 - (void)startLoading {
     NSMutableURLRequest *mutableReqeust = [[self request] mutableCopy];
-    //标示改request已经处理过了，防止无限循环
+    // 标示改request已经处理过了，防止无限循环
     [NSURLProtocol setProperty:@YES forKey:FilteredKey inRequest:mutableReqeust];
-    self.connection = [NSURLConnection connectionWithRequest:mutableReqeust delegate:self];
     
+    if ([[[self request] URL].absoluteString hasSuffix:@"index.html"]) {
+        NSLog(@"To read data");
+ 
+        NSURL *url = [self request].URL;
+        NSString *resourcePath = url.path;
+        resourcePath = [resourcePath substringFromIndex:1];//把第一个/去掉
+ 
+        NSString *path = [FilteredProtocol generateDateReadPath: self.request.URL.absoluteString];
+        
+        NSLog(@"Read data from path = %@", path);
+        NSFileHandle *file = [NSFileHandle fileHandleForReadingAtPath:path];
+        NSData *data = [file readDataToEndOfFile];
+        NSLog(@"Got data = %@", data);
+        [file closeFile];
+        
+        //3.拼接响应Response
+        NSInteger dataLength = data.length;
+        NSString *mimeType = [self getMIMETypeWithCAPIAtFilePath:path];
+        NSString *httpVersion = @"HTTP/1.1";
+        NSHTTPURLResponse *response = nil;
+        
+        if (dataLength > 0) {
+            response = [self jointResponseWithData:data dataLength:dataLength mimeType:mimeType requestUrl:url statusCode:200 httpVersion:httpVersion];
+        } else {
+            response = [self jointResponseWithData:[@"404" dataUsingEncoding:NSUTF8StringEncoding] dataLength:3 mimeType:mimeType requestUrl:url statusCode:404 httpVersion:httpVersion];
+        }
+        
+        //4.响应
+        [[self client] URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];
+        [[self client] URLProtocol:self didLoadData:data];
+        [[self client] URLProtocolDidFinishLoading:self];
+    }
+    else {
+        self.connection = [NSURLConnection connectionWithRequest:mutableReqeust delegate:self];
+    }
 }
 
 - (void)stopLoading
@@ -61,6 +96,35 @@ static NSString*const FilteredKey = @"FilteredKey";
         self.connection = nil;
     }
 }
+
+
+- (NSString *)getMIMETypeWithCAPIAtFilePath:(NSString *)path
+{
+    if (![[[NSFileManager alloc] init] fileExistsAtPath:path]) {
+        return nil;
+    }
+    
+    CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)[path pathExtension], NULL);
+    CFStringRef MIMEType = UTTypeCopyPreferredTagWithClass (UTI, kUTTagClassMIMEType);
+    CFRelease(UTI);
+    if (!MIMEType) {
+        return @"application/octet-stream";
+    }
+    return (__bridge NSString *)(MIMEType)
+    ;
+}
+
+#pragma mark - 拼接响应Response
+- (NSHTTPURLResponse *)jointResponseWithData:(NSData *)data dataLength:(NSInteger)dataLength mimeType:(NSString *)mimeType requestUrl:(NSURL *)requestUrl statusCode:(NSInteger)statusCode httpVersion:(NSString *)httpVersion
+{
+    NSDictionary *dict = @{@"Content-type":mimeType,
+                           @"Content-length":[NSString stringWithFormat:@"%ld",dataLength]};
+    NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:requestUrl statusCode:statusCode HTTPVersion:httpVersion headerFields:dict];
+    return response;
+}
+
+
+
 #pragma mark- NSURLConnectionDelegate
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
@@ -84,18 +148,16 @@ static NSString*const FilteredKey = @"FilteredKey";
 }
 
 + (NSString *)generateProxyPath:(NSString *) absoluteURL {
-    NSString *cacheFilePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-    NSFileManager *fm = [NSFileManager defaultManager];
     NSString *tmpFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"dist"];
-    NSString *fileURL = [@"file:/" stringByAppendingString: tmpFilePath];
-
-    [fm removeItemAtPath:tmpFilePath error:nil];
-    NSError *saveError;
-    //读取前先从caches拷贝到tmp临时文件夹
-    [[NSFileManager defaultManager] copyItemAtURL:[NSURL fileURLWithPath:[cacheFilePath stringByAppendingPathComponent:@"dist"]] toURL:[NSURL fileURLWithPath:tmpFilePath] error:&saveError];
-    NSLog(@"copy ok");
+    NSString *fileAbsoluteURL = [@"file:/" stringByAppendingString:tmpFilePath];
     return [absoluteURL stringByReplacingOccurrencesOfString:regPrefix
-                                                 withString:fileURL];
+                                                 withString:fileAbsoluteURL];
+}
+
++ (NSString *)generateDateReadPath:(NSString *) absoluteURL {
+    NSString *fileDataReadURL = [NSTemporaryDirectory() stringByAppendingPathComponent:@"dist"];
+    return [absoluteURL stringByReplacingOccurrencesOfString:regPrefix
+                                                  withString:fileDataReadURL];
 }
 @end
 
