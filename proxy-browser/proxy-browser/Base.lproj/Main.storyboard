@@ -40,7 +40,7 @@
                                 </connections>
                             </button>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ikc-VB-Icn">
-                                <rect key="frame" x="0.0" y="100" width="375" height="567"/>
+                                <rect key="frame" x="0.0" y="90" width="375" height="577"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -51,11 +51,11 @@
                                 <rect key="frame" x="180" y="40" width="30" height="30"/>
                                 <state key="normal" title="↓"/>
                                 <connections>
-                                    <action selector="downloadSource:" destination="BYZ-38-t0r" eventType="touchDown" id="kLS-Qz-YX5"/>
+                                    <action selector="downloadHandler:" destination="BYZ-38-t0r" eventType="touchDown" id="gh7-EI-k0a"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.97521605879999995" green="0.9692982751" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="ikc-VB-Icn" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="1X2-lu-l4b"/>
                             <constraint firstItem="3s6-Rk-zOr" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="40" id="8sk-lL-Gf7"/>
@@ -63,11 +63,10 @@
                             <constraint firstItem="3s6-Rk-zOr" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="180" id="Dw6-1Q-MyQ"/>
                             <constraint firstItem="Q6t-W8-roq" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="40" id="FQI-fP-yXU"/>
                             <constraint firstItem="slW-96-Vsh" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="40" id="GNz-MF-fcL"/>
-                            <constraint firstItem="ikc-VB-Icn" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="100" id="GjK-Ut-OeE"/>
+                            <constraint firstItem="ikc-VB-Icn" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="90" id="GjK-Ut-OeE"/>
                             <constraint firstItem="slW-96-Vsh" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="100" id="K3z-hU-WdN"/>
                             <constraint firstAttribute="bottom" secondItem="ikc-VB-Icn" secondAttribute="bottom" id="TOK-Hf-qsE"/>
                             <constraint firstAttribute="trailing" secondItem="Q6t-W8-roq" secondAttribute="trailing" constant="20" id="U1r-me-fcV"/>
-                            <constraint firstItem="ikc-VB-Icn" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="100" id="XWM-hL-yBn"/>
                             <constraint firstItem="4lC-M2-dNB" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="nEg-mV-P6k"/>
                             <constraint firstAttribute="trailing" secondItem="ikc-VB-Icn" secondAttribute="trailing" id="vCc-8q-diI"/>
                         </constraints>

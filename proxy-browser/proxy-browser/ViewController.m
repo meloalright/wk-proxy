@@ -30,6 +30,8 @@
 
     }
     
+    [self downloadZip];
+    
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -49,7 +51,50 @@
     }];
 }
 
-- (IBAction)downloadSource:(id)sender {
+- (IBAction)downloadHandler:(id)sender {
+    [self downloadZip];
+}
+
+- (IBAction)regist:(id)sender {
+    [self clearBrowserCache];
+    [self migrateDistToTempory];
+    [NSURLProtocol registerClass:[FilteredProtocol class]];
+    NSLog(@"regist");
+}
+
+- (IBAction)unregist:(id)sender {
+    [self clearBrowserCache];
+    [NSURLProtocol unregisterClass:[FilteredProtocol class]];
+    NSLog(@"unregist");
+}
+
+- (IBAction)browserHandler:(id)sender {
+    NSLog(@"open browser");
+    [super viewDidLoad];
+
+    NSURL *nsurl=[NSURL URLWithString:@"http://10.2.138.225:3233/index.html"];
+
+    NSURLRequest *nsrequest=[NSURLRequest requestWithURL:nsurl];
+
+    [self.wk loadRequest: nsrequest];
+}
+
+static NSUInteger const TIMEOUT = 300;
+
+- (NSURLSession *)sessionWithHeaders: (NSDictionary *)headers {
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
+    configuration.timeoutIntervalForRequest = TIMEOUT;
+    configuration.timeoutIntervalForResource = TIMEOUT;
+    if (headers) {
+        [configuration setHTTPAdditionalHeaders:headers];
+    }
+    
+    return [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
+}
+
+
+- (void)downloadZip {
     NSDictionary *_headers;
     NSURLSession *_session = [self sessionWithHeaders:_headers];
     NSURL *url = [NSURL URLWithString: @"http://10.2.138.225:3238/dist.zip"];
@@ -92,45 +137,6 @@
     }];
     
     [downloadTask resume];
-}
-
-
-
-
-- (IBAction)regist:(id)sender {
-    [self clearBrowserCache];
-    [self migrateDistToTempory];
-    [NSURLProtocol registerClass:[FilteredProtocol class]];
-}
-
-- (IBAction)unregist:(id)sender {
-    [self clearBrowserCache];
-    [NSURLProtocol unregisterClass:[FilteredProtocol class]];
-}
-
-- (IBAction)browserHandler:(id)sender {
-    NSLog(@"open browser");
-    [super viewDidLoad];
-
-    NSURL *nsurl=[NSURL URLWithString:@"http://10.2.138.225:3233/index.html"];
-
-    NSURLRequest *nsrequest=[NSURLRequest requestWithURL:nsurl];
-
-    [self.wk loadRequest: nsrequest];
-}
-
-static NSUInteger const TIMEOUT = 300;
-
-- (NSURLSession *)sessionWithHeaders: (NSDictionary *)headers {
-    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
-    configuration.timeoutIntervalForRequest = TIMEOUT;
-    configuration.timeoutIntervalForResource = TIMEOUT;
-    if (headers) {
-        [configuration setHTTPAdditionalHeaders:headers];
-    }
-    
-    return [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
 }
 
 

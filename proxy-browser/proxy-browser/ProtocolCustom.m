@@ -9,9 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 
-static NSString*const matchingPrefix = @"http://10.2.138.225:3233/static";
+static NSString*const matchingPrefix = @"http://10.2.138.225:3233/static/";
 static NSString*const regPrefix = @"http://10.2.138.225:3233";
-static NSString* tmpURL = @"";
 static NSString*const FilteredKey = @"FilteredKey";
 
 
@@ -51,12 +50,9 @@ static NSString*const FilteredKey = @"FilteredKey";
     // 标示改request已经处理过了，防止无限循环
     [NSURLProtocol setProperty:@YES forKey:FilteredKey inRequest:mutableReqeust];
     
-    if ([[[self request] URL].absoluteString hasSuffix:@"index.html"]) {
-        NSLog(@"To read data");
- 
-        NSURL *url = [self request].URL;
-        NSString *resourcePath = url.path;
-        resourcePath = [resourcePath substringFromIndex:1];//把第一个/去掉
+    if ([self.request.URL.absoluteString hasSuffix:@"index.html"]) {
+
+        NSURL *url = self.request.URL;
  
         NSString *path = [FilteredProtocol generateDateReadPath: self.request.URL.absoluteString];
         
