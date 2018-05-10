@@ -1,37 +1,23 @@
-# wk-proxy    
-   
-   
-## Step 1    
-    
-```shell
-# start zip download serve
-npm run 3238
-```
-   
-   
+# WK Proxy
 
+`WKWebview 离线化加载 Web 资源解决方案`
 
+`思路: 使用 NSURLProtocol 拦截请求转发到本地。`
 
-## Step 2    
-    
+## Run [Proxy-Browser](./proxy-browser)
+
+`Open xcworkspace + Run app`
+
+## Run Static Service
+
+`Create web static service`
+
 ```shell
-# start web serve
-npm run 3233
+$ http-server ./zip-in-vue/dist/ -p 3233
 ```
-                
-   
-   
-## Step 3    
-   
+
+`Create another bash + Create zip source static service`
+
 ```shell
-# iOS project
-cd proxy-browser && pod install 
-```
-                
-   
-   
-## Step 4    
-   
-```shell
-# open xcworkspace + run app
+$ http-server ./zip-in-vue -p 3238
 ```
